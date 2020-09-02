@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Send File</title>
+</head>
+
+<body>
+	{% load crispy_forms_tags %}
+	{% block content %}
+	{%if user.is_authenticated %}
+		<h1>Hello {{user.get_username}}</h1>
+		<h2>Upload</h2>
+		<form method="post" enctype="multipart/form-data">
+			{% csrf_token %}
+			<input type="text" name="username">
+			<input type="file" name="document">
+			<button type="submit">Upload file</button>
+		</form>
+		{% if url %}
+			<p>Uploaded file: <a href="{{ url }}">{{ url }}</a></p>
+		{% endif %}
+		<div>
+            {% for message in messages %}
+            <h3> {{message}}  </h3>
+            {% endfor %}
+    	</div>
+		
+		<a href="/logout">Logout</a>
+	{% else %}
+        <h1>PLEASE LOGIN</h1>
+	{% endif %}
+	{% endblock %}
+	
+</body>
+</html>

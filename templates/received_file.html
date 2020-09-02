@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Received File</title>
+</head>
+
+<body>
+	{% block content %}
+	{%if user.is_authenticated %}
+		<h1>Hello {{user.get_username}}</h1>
+		<a href="/logout">Logout</a>
+		{% for message in Messages %}
+			
+			{% if message.file_upload %}
+				{% if message.receiver == user %}
+				<h1>From : {{ message.emitter }}</h1>
+				<h1>Date : {{ message.date_message }}</h1>
+				<a href="{{ message.file_upload.url }}" target="_blank">Download</a>
+				{% endif %}
+			{% endif %}
+		{% endfor %}
+	{% else %}
+        <h1>PLEASE LOGIN</h1>
+	{% endif %}
+	{% endblock %}
+	
+</body>
+</html>
