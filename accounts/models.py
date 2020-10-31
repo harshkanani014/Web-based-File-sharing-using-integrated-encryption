@@ -8,12 +8,7 @@ class Message(models.Model):
     date_message = models.DateTimeField(default=timezone.now)
     file_upload = models.FileField(upload_to='documents/')
 
-class Register(models.Model):
-    first_name = models.TextField(default="")
-    username = models.TextField()
-    public_key = models.TextField()
 
 class userdetails(models.Model):
-    first_name = models.TextField()
     username = models.TextField()
     public_key = models.TextField()

@@ -3,7 +3,7 @@ from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout, get_user
 from django.contrib.auth.models import User, auth
 from django.http import Http404
-from .models import Message, Register, userdetails
+from .models import Message, userdetails
 import json
 from django.http import JsonResponse
 from django.core.files.storage import FileSystemStorage
@@ -55,7 +55,7 @@ def register(request):
                 return redirect('register')
             else:   
                 user = User.objects.create_user(username=username, password=password1, email=email,first_name=first_name,last_name=last_name)
-                user.save();
+                user.save()
                 newuser = Register()
                 newuser.username = username
                 newuser.public_key = "abcdadadajjdjp"
@@ -82,26 +82,7 @@ def logout(request):
 ################################################################################
 
 def send_file(request):
-    if request.user.is_authenticated:
-        context = {}
-        if request.method == 'POST':
-            uploaded_file = request.FILES['document']
-            fs = FileSystemStorage()
-            name = fs.save(uploaded_file.name, uploaded_file)
-            context['url'] = fs.url(name)
-            message = request.POST.get('username')
-            print(message)
-            newMessage = Message()
-            newMessage.file_upload = uploaded_file
-            newMessage.emitter = request.user
-            newMessage.receiver = User.objects.get(username=message)
-            newMessage.save()
-            return render(request, 'send_file.html', context)
-
-        else:
-            return render(request, 'send_file.html')
-    else:
-        return redirect('/')      
+        return render(request, 'register.html')      
 
 def received_file(request):
     if request.user.is_authenticated:
