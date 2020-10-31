@@ -3,7 +3,7 @@ from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout, get_user
 from django.contrib.auth.models import User, auth
 from django.http import Http404
-from .models import Message
+from .models import Message, Register, userdetails
 import json
 from django.http import JsonResponse
 from django.core.files.storage import FileSystemStorage
@@ -56,6 +56,10 @@ def register(request):
             else:   
                 user = User.objects.create_user(username=username, password=password1, email=email,first_name=first_name,last_name=last_name)
                 user.save();
+                newuser = Register()
+                newuser.username = username
+                newuser.public_key = "abcdadadajjdjp"
+                newuser.save()
                 print('user created')
                 return redirect('login')
 
@@ -105,3 +109,11 @@ def received_file(request):
         return render(request, 'received_file.html', {'Messages': Messages })
     else:
         return redirect('/')
+    
+
+def new_user_register(request):
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+    u = userdetails(**body)
+    u.save()
+    return JsonResponse({"result": "OK"})
