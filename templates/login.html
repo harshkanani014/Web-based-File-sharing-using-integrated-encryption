@@ -1,45 +1,37 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Login Form</title>
-	<link rel="stylesheet" type="text/css" href="static/css/login.css">
-	<link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
-	<script src="https://kit.fontawesome.com/a81368914c.js"></script>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<body>
-	<div class="container">
-		<div class="img">
-			<img src="static/images/login.png">
-		</div>
-		<div class="login-content">
-			<form action="login" method="post">
-				{% csrf_token %}
-				<h2 class="title">CRYPTSEND</h2>
-           		<div class="input-div one">
-           		   <div class="i">
-           		   		<i class="fas fa-user"></i>
-           		   </div>
-           		   <div class="div">
-           		   		<input placeholder="Username" type="text" class="input">
-           		   </div>
-           		</div>
-           		<div class="input-div pass">
-           		   <div class="i"> 
-           		    	<i class="fas fa-lock"></i>
-           		   </div>
-           		   <div class="div">
-           		    	<input placeholder="Password" type="password" class="input">
-            	   </div>
-            	</div>
-            	<input type="submit" class="btn" value="Login">
-			</form>
-			<div>
-				{% for message in messages %}
-				<h3> {{message}}  </h3>
-				{% endfor %}
+
+	<head>
+		<title>Login Form</title>
+		<link rel="stylesheet" type="text/css" href="static/css/login.css">
+		<link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
+		<script src="https://kit.fontawesome.com/a81368914c.js"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	</head>
+
+	<body>
+		<div class="container">
+			<div class="img">
+				<img src="static/images/login.png">
 			</div>
-        </div>
-    </div>
-</body>
+			<div class="login-content">
+				<form action="login" method="post">
+					{% csrf_token %}
+					<h2 class="title">CRYPTSEND</h2>
+					<label for="username">User Name </label><input id="userName" /><br><br>
+					<label for="passphrase">Passphrase </label><input id="Passphrase" /><br><br>
+					<input type="file" id="secretKeyFile"><br><br>
+					<button type="button" id="uploadBtn">Upload Secret Key File</button>
+				</form>
+				<div>
+					{% for message in messages %}
+					<h3> {{message}} </h3>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="../static/js/CryptSend.js"></script>
+	</body>
+
 </html>

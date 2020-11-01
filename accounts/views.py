@@ -45,13 +45,30 @@ def received_file(request):
         return render(request, 'received_file.html', {'Messages': Messages })
     else:
         return redirect('/')
-    
+
+def authenticate_user(request):
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+    username = body.get('username', None)
+    if User.objects.filter(username=username).exists():
+            return JsonResponse({"result": "ok"})
+    else:
+        print("error")
+        return redirect("/")
+
+
+
+
+
 @csrf_protect
 def new_user_register(request):
     body_unicode = request.body.decode('utf-8')
     print(body_unicode)
     body = json.loads(body_unicode)
-    print(body)
+    username = body.get('username', None)
+    user = User.objects.create_user(username=username)
+    user.save()
     u = userdetails(**body)
     u.save()
     return JsonResponse({"result": "ok"})
+

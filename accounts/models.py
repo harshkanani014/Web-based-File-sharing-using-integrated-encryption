@@ -11,4 +11,5 @@ class Message(models.Model):
 
 class userdetails(models.Model):
     username = models.TextField()
-    public_key = models.TextField()
+    public_keyX = models.TextField()
+    public_keyY = models.TextField()

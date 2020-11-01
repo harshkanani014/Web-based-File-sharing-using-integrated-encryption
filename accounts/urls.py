@@ -11,5 +11,9 @@ urlpatterns = [
     path("", views.home_page, name="home_page"),
     path("send_file", views.send_file, name="send_file"),
     path("received_file", views.received_file, name="received_file"),
-    path("read_json_data", views.new_user_register, name="new_user_register")
+    path("read_json_data", views.new_user_register, name="new_user_register"),
+    path("login_successful", views.authenticate_user, name="authenticate_user")
+    
 ]
+
+
