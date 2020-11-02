@@ -1,21 +1,100 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Home page</title>
-</head>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home Page</title>
+    <link rel="stylesheet" type="text/css" href="static/css/unautherisedHomePage.css" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+      integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+      crossorigin="anonymous"
+    />
+    <link href="https://fonts.googleapis.com/css2?family=Staatliches&display=swap" rel="stylesheet">
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+      integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+      integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body style="background-color:#90CCF4;;">
+    <nav class="navbar-dark">
+      <div class="main">
+        <header>
+          <input type="checkbox" name="" id="" />
+          <a href="login">Login</a>
+          <a href="register">SignUp</a>
+        </header>
+        <span class="username">A FAIR SHARE !!!</span>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="centreTag"> 
+          CRYPTSEND 
+      </div>
+      <p class="info">
+        Most professional programmers that I’ve encountered are not well prepared to
+        tackle algorithm design problems. This is a pity, because the techniques of algorithm
+        design form one of the core practical technologies of computer science. Designing
+        correct, efficient, and implementable algorithms for real-world problems requires
+        access to two distinct bodies of knowledge: <br> <br>
 
-<body>
-	{% block content %}
-	{%if user.is_authenticated %}
-		<h1>Hello {{user.get_username}}</h1>
-		<a href="/send_file">Send File</a>
-		<a href="/received_file">Received File</a>
-		<a href="/logout">Logout</a>
-	{% else %}
-	<a href="/register">register</a>
-	<a href="/login">Login</a>
-	{% endif %}
-	{% endblock %}
-	
-</body>
+        • Techniques – Good algorithm designers understand several fundamental algorithm
+        design techniques, including data structures, dynamic programming,
+        depth-first search, backtracking, and heuristics. Perhaps the single most important
+        design technique is modeling, the art of abstracting a messy real-world
+        application into a clean problem suitable for algorithmic attack.
+        • Resources – Good algorithm designers stand on the shoulders of giants.
+        Rather than laboring from scratch to produce a new algorithm for every task,
+        they can figure out what is known about a particular problem. Rather than
+        re-implementing popular algorithms from scratch, they seek existing implementations
+        to serve as a starting point. They are familiar with many classic
+        algorithmic problems, which provide sufficient source material to model most
+        any application. <br> <br>
+
+        This book is intended as a manual on algorithm design, providing access to
+        combinatorial algorithm technology for both students and computer professionals.
+        It is divided into two parts: Techniques and Resources. The former is a general
+        guide to techniques for the design and analysis of computer algorithms. The Resources
+        section is intended for browsing and reference, and comprises the catalog
+        of algorithmic resources, implementations, and an extensive bibliography. <br> <br>
+
+        Most professional programmers that I’ve encountered are not well prepared to
+        tackle algorithm design problems. This is a pity, because the techniques of algorithm
+        design form one of the core practical technologies of computer science. Designing
+        correct, efficient, and implementable algorithms for real-world problems requires
+        access to two distinct bodies of knowledge: <br> <br>
+
+        • Techniques – Good algorithm designers understand several fundamental algorithm
+        design techniques, including data structures, dynamic programming,
+        depth-first search, backtracking, and heuristics. Perhaps the single most important
+        design technique is modeling, the art of abstracting a messy real-world
+        application into a clean problem suitable for algorithmic attack.
+        • Resources – Good algorithm designers stand on the shoulders of giants.
+        Rather than laboring from scratch to produce a new algorithm for every task,
+        they can figure out what is known about a particular problem. Rather than
+        re-implementing popular algorithms from scratch, they seek existing implementations
+        to serve as a starting point. They are familiar with many classic
+        algorithmic problems, which provide sufficient source material to model most
+        
+        This book is intended as a manual on algorithm design, providing access to
+        combinatorial algorithm technology for both students and computer professionals.
+        It is divided into two parts: Techniques and Resources. The former is a general
+        guide to techniques for the design and analysis of computer algorithms. The Resources
+        section is intended for browsing and reference, and comprises the catalog
+        of algorithmic resources, implementations, and an extensive bibliography. <br> <br>
+        any application. <br> <br> <br> <br>
+        <img src="static/images/encrpt.png" alt="Encryption" style="margin-left: 20%;"> <br> <br>
+
+
+    </p>
+    </div>
+  </body>
 </html>
