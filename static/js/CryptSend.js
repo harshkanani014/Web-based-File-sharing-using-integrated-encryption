@@ -1,9 +1,9 @@
 //Global variables
-var clientPermanentPublicKeyXHex = null;
-var clientPermanentPublicKeyYHex = null;
-var clientPermanentPrivateKey = null;
-var recipientPublicKeyXHex = null;
-var recipientPublicKeyYHex = null;
+let clientPermanentPublicKeyXHex = null;
+let clientPermanentPublicKeyYHex = null;
+let clientPermanentPrivateKey = null;
+let recipientPublicKeyXHex = null;
+let recipientPublicKeyYHex = null;
 
 //Useful Functions
 function readFile(file) {
@@ -317,6 +317,9 @@ function login() {
         return;
       });
     console.log("Client's ECDH private key unwrapped and imported");
+    let tempClientPermanentPrivateKey = await window.crypto.subtle.exportKey("jwk", clientPermanentPrivateKey);
+    sessionStorage.setItem("clientPermanentPrivateKey", JSON.stringify(tempClientPermanentPrivateKey));
+
     //Only for Testing ?
     clientPermanentPublicKeyXHex = Uint8ArrayToHexString(ecdhPublicKeyXBytes);
     clientPermanentPublicKeyYHex = Uint8ArrayToHexString(ecdhPublicKeyYBytes);
@@ -347,11 +350,12 @@ function login() {
       }
       response.json().then(function (data) {
         console.log(data);
-        window.location.replace(`${window.origin}/`);
+        window.location.replace(`${window.origin}/send_file`);
       });
     });
   }
 }
+
 
 function encryptAndSend() {
   //Depends on the front-end
@@ -361,17 +365,13 @@ function encryptAndSend() {
 
   sendBtn.addEventListener("click", () => {
     console.log("Encrypt and send process initiated");
-    encryption();
+    //encryption();
+    receive_key();
   });
 
-  async function encryption() {
-    /* Fetch the recipient's public keys from server/database
-        recipientPublicKeyXHex = 
-        recipientPublicKeyYHex = 
-        */
-    
+  function receive_key(){
     let req_json = { username: `${recipientUserName.value}` };
-    let data = fetch(`${window.origin}/send_request`, {
+      fetch(`${window.origin}/send_request`, {
       method: "POST",
       credentials: "include",
       body: JSON.stringify(req_json),
@@ -387,15 +387,52 @@ function encryptAndSend() {
       }
       response.json().then(function (data) {
         console.log(data);
-        return data;
-        //recipientPublicKeyXHex = data.public_keyX;
-        //recipientPublicKeyYHex = data.public_keyY;
+        console.log(typeof data);
+        recipientPublicKeyXHex = data.public_keyX;
+        recipientPublicKeyYHex = data.public_keyY;
+        console.log(recipientPublicKeyXHex);
+        console.log(recipientPublicKeyYHex);
+        //return data;
+        encryption(recipientPublicKeyXHex, recipientPublicKeyYHex);
       });
     });
-    let recipientPublicKeyXHex = data.public_keyX, recipientPublicKeyYHex = data.public_keyY;
+
+  }
+  async function encryption(recipientPublicKeyXHex, recipientPublicKeyYHex) {
+    /* Fetch the recipient's public keys from server/database
+        recipientPublicKeyXHex = 
+        recipientPublicKeyYHex = 
+        */
     
-    console.log(recipientPublicKeyXHex);
-    console.log(recipientPublicKeyYHex);
+    /*let req_json = { username: `${recipientUserName.value}` };
+      fetch(`${window.origin}/send_request`, {
+      method: "POST",
+      credentials: "include",
+      body: JSON.stringify(req_json),
+      cache: "no-cache",
+      headers: new Headers({
+        "X-CSRFToken": getCookie("csrftoken"),
+        "content-type": "application/json",
+      }),
+    }).then(function (response) {
+      if (response.status != 200) {
+        console.log(`Response status not 200 : ${response.status}`);
+        return;
+      }
+      response.json().then(function (data) {
+        console.log(data);
+        console.log(typeof data);
+        recipientPublicKeyXHex = data.public_keyX;
+        recipientPublicKeyYHex = data.public_keyY;
+        console.log(recipientPublicKeyXHex);
+        console.log(recipientPublicKeyYHex);
+        //return data;
+      });
+    });*/
+    //console.log(data);
+    //recipientPublicKeyXHex = data.public_keyX; 
+    //recipientPublicKeyYHex = data.public_keyY;
+    
     var recipientPublicKeyXb64url = Uint8ArrayToBase64URLString(
       HexStringToUint8Array(recipientPublicKeyXHex)
     );
@@ -423,7 +460,22 @@ function encryptAndSend() {
         console.error(err);
       });
     console.log("Recipient's public key imported.");
-
+    console.log(sessionStorage.getItem("clientPermanentPrivateKey"));
+    let tempClientPermanentPrivateKey = sessionStorage.getItem("clientPermanentPrivateKey");
+    var clientPermanentPrivateKey = await window.crypto.subtle
+      .importKey(
+        "jwk",
+        JSON.parse(tempClientPermanentPrivateKey),
+        {
+          name: "ECDH",
+          namedCurve: "P-256",
+        },
+        true,
+        ["deriveKey"]
+      )
+      .catch((err) => {
+        console.error(err);
+      });
     var encryptionKey = await window.crypto.subtle
       .deriveKey(
         {
@@ -464,12 +516,12 @@ function encryptAndSend() {
     //let userEncryptedFileHex = Uint8ArrayToHexString(new Uint8Array(userEncryptedFileArrayBuffer));
     // It might be possible that the following approach won't work. In such a case,
     // see encryptedsend's implementation involving AppendArrays function.
-    let payload = new Blob[
-      (iv, new Uint8Array(userEncryptedFileArrayBuffer))
-    ]();
+    let payload = new Blob([
+      iv, new Uint8Array(userEncryptedFileArrayBuffer)], {type:'application/octet-stream'}
+    );
 
     //Send this payload to a database/server.
-    let payload_json = { payload: `${payload}` };
+    let payload_json = { payload: `${payload}`, username: `${recipientUserName.value}` };
     fetch(`${window.origin}/get_payload`, {
       method: "POST",
       credentials: "include",

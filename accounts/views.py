@@ -81,7 +81,7 @@ def get_payload(request):
         file_rec = body.get('payload', None)
         new_message = Message()
         new_message.emitter = emitter
-        new_message.receiver = receiver
+        new_message.receiver = User.objects.get(username=receiver)
         new_message.file_upload = file_rec
         new_message.save()
         return JsonResponse({"result": "ok"})
