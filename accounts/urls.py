@@ -14,7 +14,9 @@ urlpatterns = [
     path("read_json_data", views.new_user_register, name="new_user_register"),
     path("login_successful", views.authenticate_user, name="authenticate_user"),
      path("send_request", views.send_request, name="send_request"),
-    path("get_payload", views.get_payload, name="get_payload")
+    path("get_payload", views.get_payload, name="get_payload"),
+    path("get_received_files", views.send_encrypted_file, name="send_encrypted_file"),
+    path("get_senderpublickey", views.fetch_emmiter, name="fetch_emmiter")
     
 ]
 

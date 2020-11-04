@@ -15,7 +15,7 @@
 				{% if message.receiver == user %}
 				<h1>From : {{ message.emitter }}</h1>
 				<h1>Date : {{ message.date_message }}</h1>
-				<a href="{{ message.file_upload.url }}" target="_blank">Download</a>
+				<button type="button" id="download">Download</a>
 				{% endif %}
 			{% endif %}
 		{% endfor %}
@@ -23,6 +23,8 @@
         <h1>PLEASE LOGIN</h1>
 	{% endif %}
 	{% endblock %}
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="../static/js/CryptSend.js"></script>
 	
 </body>
 </html>

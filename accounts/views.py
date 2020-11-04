@@ -11,6 +11,7 @@ from django.core.files.storage import FileSystemStorage
 from django.urls import reverse_lazy
 from django.views import generic
 from django.views.decorators.csrf import csrf_protect
+import base64
 # Create your views here.
 
 def home_page(request):
@@ -72,19 +73,31 @@ def send_request(request):
         print(publickeyY)
         return JsonResponse({"public_keyX": publickeyX, "public_keyY": publickeyY})
 
+
+
 def get_payload(request):
     if request.user.is_authenticated:
+        #print(type(request.body))
+        #print(request.body)
         body_unicode = request.body.decode('utf-8')
+        #print(request.body)
+        #print(type(request.body))
+        #print(type(body_unicode))
         body = json.loads(body_unicode)
-        receiver = body.get('username', None)
+        receiver = body.get('username')
         emitter = request.user
-        file_rec = body.get('payload', None)
+        file_rec = body.get('payload')    
+        #print(type(file_rec))
+        #print(file_rec)
+        #print(file_rec)
         new_message = Message()
         new_message.emitter = emitter
         new_message.receiver = User.objects.get(username=receiver)
         new_message.file_upload = file_rec
         new_message.save()
         return JsonResponse({"result": "ok"})
+    
+
 
 
 
@@ -118,7 +131,23 @@ def authenticate_user(request):
         print("error")
         return redirect("/")
 
+def send_encrypted_file(request):
+    currentuser = request.user
+    data = Message.objects.get(receiver=currentuser)
+    file_is = data.file_upload
+    #print(file_is)
+    our_json = {"userFiles": file_is}
+    #new_json = json.dump(our_json)
+    return JsonResponse({"userFiles": file_is})
 
+def fetch_emmiter(request):
+    currentuser = request.user
+    data = Message.objects.get(receiver=currentuser)
+    emmiter = data.emitter
+    data1 = userdetails.objects.get(username=emmiter)
+    public_keyX = data1.public_keyX
+    public_keyY = data1.public_keyY
+    return JsonResponse({"public_keyX": public_keyX, "public_keyY": public_keyY})
 
 
 

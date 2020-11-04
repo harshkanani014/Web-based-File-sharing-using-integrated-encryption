@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'file_sharing.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'file_sharing',
+        'NAME': 'file_share_1',
         'USER': 'postgres',
         'PASSWORD': 'harsh1234',
         'HOST': 'localhost'

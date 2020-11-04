@@ -17,6 +17,38 @@ function readFile(file) {
   });
 }
 
+function readFileDataURL(file) {
+  return new Promise((resolve) => {
+    let reader = new FileReader();
+    reader.onload = () => {
+      resolve(reader.result.replace(/^data:.+;base64,/, ''));
+      //resolve(reader.result);
+    };
+    reader.readAsDataURL(file);
+    console.log("File read as data URL");
+  });
+}
+
+/*const b64toBlob = (b64Data, contentType='', sliceSize=512) => {
+  const byteCharacters = atob(b64Data);
+  const byteArrays = [];
+
+  for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+    const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+    const byteNumbers = new Array(slice.length);
+    for (let i = 0; i < slice.length; i++) {
+      byteNumbers[i] = slice.charCodeAt(i);
+    }
+
+    const byteArray = new Uint8Array(byteNumbers);
+    byteArrays.push(byteArray);
+  }
+
+  const blob = new Blob(byteArrays, {type: contentType});
+  return blob;
+}*/
+
 function getCookie(name) {
   var cookieValue = null;
   if (document.cookie && document.cookie != "") {
@@ -317,8 +349,14 @@ function login() {
         return;
       });
     console.log("Client's ECDH private key unwrapped and imported");
-    let tempClientPermanentPrivateKey = await window.crypto.subtle.exportKey("jwk", clientPermanentPrivateKey);
-    sessionStorage.setItem("clientPermanentPrivateKey", JSON.stringify(tempClientPermanentPrivateKey));
+    let tempClientPermanentPrivateKey = await window.crypto.subtle.exportKey(
+      "jwk",
+      clientPermanentPrivateKey
+    );
+    sessionStorage.setItem(
+      "clientPermanentPrivateKey",
+      JSON.stringify(tempClientPermanentPrivateKey)
+    );
 
     //Only for Testing ?
     clientPermanentPublicKeyXHex = Uint8ArrayToHexString(ecdhPublicKeyXBytes);
@@ -356,7 +394,6 @@ function login() {
   }
 }
 
-
 function encryptAndSend() {
   //Depends on the front-end
   let recipientUserName = document.getElementById("username");
@@ -369,9 +406,9 @@ function encryptAndSend() {
     receive_key();
   });
 
-  function receive_key(){
+  function receive_key() {
     let req_json = { username: `${recipientUserName.value}` };
-      fetch(`${window.origin}/send_request`, {
+    fetch(`${window.origin}/send_request`, {
       method: "POST",
       credentials: "include",
       body: JSON.stringify(req_json),
@@ -396,14 +433,13 @@ function encryptAndSend() {
         encryption(recipientPublicKeyXHex, recipientPublicKeyYHex);
       });
     });
-
   }
   async function encryption(recipientPublicKeyXHex, recipientPublicKeyYHex) {
     /* Fetch the recipient's public keys from server/database
         recipientPublicKeyXHex = 
         recipientPublicKeyYHex = 
         */
-    
+
     /*let req_json = { username: `${recipientUserName.value}` };
       fetch(`${window.origin}/send_request`, {
       method: "POST",
@@ -430,9 +466,9 @@ function encryptAndSend() {
       });
     });*/
     //console.log(data);
-    //recipientPublicKeyXHex = data.public_keyX; 
+    //recipientPublicKeyXHex = data.public_keyX;
     //recipientPublicKeyYHex = data.public_keyY;
-    
+
     var recipientPublicKeyXb64url = Uint8ArrayToBase64URLString(
       HexStringToUint8Array(recipientPublicKeyXHex)
     );
@@ -461,7 +497,9 @@ function encryptAndSend() {
       });
     console.log("Recipient's public key imported.");
     console.log(sessionStorage.getItem("clientPermanentPrivateKey"));
-    let tempClientPermanentPrivateKey = sessionStorage.getItem("clientPermanentPrivateKey");
+    let tempClientPermanentPrivateKey = sessionStorage.getItem(
+      "clientPermanentPrivateKey"
+    );
     var clientPermanentPrivateKey = await window.crypto.subtle
       .importKey(
         "jwk",
@@ -512,38 +550,243 @@ function encryptAndSend() {
         console.log(err);
       });
     console.log("File encrypted");
-
+    //userEncryptedFile = Uint8ArrayToHexString(new Uint8Array(userEncryptedFileArrayBuffer));
     //let userEncryptedFileHex = Uint8ArrayToHexString(new Uint8Array(userEncryptedFileArrayBuffer));
     // It might be possible that the following approach won't work. In such a case,
     // see encryptedsend's implementation involving AppendArrays function.
-    let payload = new Blob([
-      iv, new Uint8Array(userEncryptedFileArrayBuffer)], {type:'application/octet-stream'}
-    );
-
-    //Send this payload to a database/server.
-    let payload_json = { payload: `${payload}`, username: `${recipientUserName.value}` };
-    fetch(`${window.origin}/get_payload`, {
-      method: "POST",
-      credentials: "include",
-      body: JSON.stringify(payload_json),
-      cache: "no-cache",
-      headers: new Headers({
-        "X-CSRFToken": getCookie("csrftoken"),
-        "content-type": "application/json",
-      }),
-    }).then(function (response) {
-      if (response.status != 200) {
-        console.log(`Response status not 200 : ${response.status}`);
-        return;
-      }
-      response.json().then(function (data) {
-        console.log(data);
-      });
+    console.log(iv);
+    console.log(new Uint8Array(userEncryptedFileArrayBuffer));
+    console.log(userEncryptedFileArrayBuffer);
+    let payload = new Blob([iv, new Uint8Array(userEncryptedFileArrayBuffer)], {
+      type: "application/octet-stream",
     });
+
+    //var reader = new FileReader(); 
+    //var userEncryptedFile;
+    /*reader.readAsDataURL(payload); 
+    reader.onloadend = async function () { 
+    userEncryptedFile = await reader.result; 
+    //console.log('Base64 String - ', userEncryptedFile);
+    }*/
+    let userEncryptedFile = await readFileDataURL(payload);
+
+    sendFile(userEncryptedFile);
+    //Send this payload to a database/server.
+    
+    
+    /*let payloadForm = new FormData();
+    payloadForm.append('username', `${recipientUserName.value}`);
+    payloadForm.append('file', payload);*/
+    function sendFile(userEncryptedFile){
+      console.log(userEncryptedFile);
+      let payload_json = {
+        payload: userEncryptedFile,
+        username: `${recipientUserName.value}`,
+      };
+      fetch(`${window.origin}/get_payload`, {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify(payload_json),
+        cache: "no-cache",
+        headers: new Headers({
+          "X-CSRFToken": getCookie("csrftoken"),
+          "content-type": "false",
+        }),
+      }).then(function (response) {
+        if (response.status != 200) {
+          console.log(`Response status not 200 : ${response.status}`);
+          return;
+        }
+        response.json().then(function (data) {
+          console.log(data);
+        });
+      });
+    }
   }
+    
 }
 
+
+function receiveAndDecrypt() {
+  //Depends on the front-end. Add an eventlistener.
+  let downloadBtn = document.getElementById("download");
+  //Fetch the files of the user from the database/server
+  let userFiles = null;
+  fetch(`${window.origin}/get_received_files`)
+  .then((res)=>{res.json().then((data)=>{console.log(data.userFiles); console.log(typeof data.userFiles);
+  downloadBtn.addEventListener("click", () => {
+        console.log("Decryption process initiated.");
+        receive_key(data.userFiles);})})});
+  // .then((data) => {userFiles = data.userFiles; console.log(userFiles)});
+  // .then(
+  // .then(() => {
+  //   downloadBtn.addEventListener("click", () => {
+  //     console.log("Decryption process initiated.");
+  //     receive_key(userFiles);
+    // });
+  // }));
+  
+  
+
+  //console.log("User files received.");
+  /*async function getFiles(){
+    let response = await fetch(`${window.origin}/get_received_files`);
+    let tempUserFiles = await response.json();
+    console.log(tempUserFiles);
+    return tempUserFiles;
+    response.then(function (response) {
+    response.json().then(function (data) {
+      console.log(data);
+      userFiles = data.userFiles;
+      console.log(userFiles);
+      //setuserfiles(data.userFiles);
+    });
+  });
+  }*/
+ // userFiles = getFiles();
+// console.log(userFiles);
+// let response = fetch(`${window.origin}/get_received_files`);
+// (async () => userFiles = await response.json());
+//   response.then(function (response) {
+//     response.json().then(function (data) {
+//       console.log(data);
+//       userFiles = data.userFiles;
+//       console.log(userFiles);
+//       //setuserfiles(data.userFiles);
+//     });
+//   });
+
+  /*function setuserfiles(userFiles){
+        userFiles = this.userFiles;
+        console.log(userFiles);
+  }*/
+  //console.log(userFiles);
+
+  // downloadBtn.addEventListener("click", () => {
+  //   console.log("Decryption process initiated.");
+  //   receive_key();
+  // });
+  
+function receive_key(userFiles){
+  let response = fetch(`${window.origin}/get_senderpublickey`);
+    response.then(function (response) {
+      response.json().then(function (data) {
+        console.log(data);
+        senderPublicKeyXHex = data.public_keyX;
+        senderPublicKeyYHex = data.public_keyY;
+        console.log(senderPublicKeyXHex);
+        decryption(senderPublicKeyXHex, senderPublicKeyYHex, userFiles);
+      });
+    });
+
+}
+  async function decryption(senderPublicKeyXHex, senderPublicKeyYHex, userFiles) {
+    /* Fetch the sender's public key from database/server
+        senderPublicKeyXHex = 
+        senderPublicKeyYHex = 
+        */
+    console.log(senderPublicKeyXHex);
+    var senderPublicKeyXb64url = Uint8ArrayToBase64URLString(
+      HexStringToUint8Array(senderPublicKeyXHex)
+    );
+    var senderPublicKeyYb64url = Uint8ArrayToBase64URLString(
+      HexStringToUint8Array(senderPublicKeyYHex)
+    );
+    var senderPublicKeyJwk =
+      '{"crv":"P-256","ext":true,"key_ops":[],"kty":"EC","x":"' +
+      senderPublicKeyXb64url +
+      '","y":"' +
+      senderPublicKeyYb64url +
+      '"}';
+    var senderPublicKey = await window.crypto.subtle
+      .importKey(
+        "jwk",
+        JSON.parse(senderPublicKeyJwk),
+        {
+          name: "ECDH",
+          namedCurve: "P-256",
+        },
+        true,
+        []
+      )
+      .catch((err) => {
+        console.error(err);
+      });
+    console.log("Sender's public key imported.");
+    let tempClientPermanentPrivateKey = sessionStorage.getItem(
+      "clientPermanentPrivateKey"
+    );
+    var clientPermanentPrivateKey = await window.crypto.subtle
+      .importKey(
+        "jwk",
+        JSON.parse(tempClientPermanentPrivateKey),
+        {
+          name: "ECDH",
+          namedCurve: "P-256",
+        },
+        true,
+        ["deriveKey"]
+      )
+      .catch((err) => {
+        console.error(err);
+      });
+    var decryptionKey = await window.crypto.subtle
+      .deriveKey(
+        {
+          name: "ECDH",
+          namedCurve: "P-256",
+          public: senderPublicKey,
+        },
+        clientPermanentPrivateKey,
+        {
+          name: "AES-GCM",
+          length: 256,
+        },
+        false,
+        ["decrypt"]
+      )
+      .catch((err) => {
+        console.error(err);
+      });
+    console.log("Decryption key derived.");
+
+    console.log(userFiles);
+    let userFileContent = Base64URLStringToUint8Array(userFiles);
+    //let userFileContent = new Uint8Array(await readFile(userFiles));
+    //let userFileContent = b64toBlob(userFiles, 'application/octet-stream');
+    console.log(userFileContent);
+    let iv = new Uint8Array(userFileContent.slice(0, 12));
+    let userEncryptedFile = userFileContent.slice(12);
+    console.log(iv);
+    console.log(userEncryptedFile);
+    let userDecryptedFile = await window.crypto.subtle
+      .decrypt(
+        {
+          name: "AES-GCM",
+          iv: iv,
+        },
+        decryptionKey,
+        userEncryptedFile
+      )
+      .catch((err) => {
+        console.log(err);
+      });
+    console.log("File decrypted and download initiated");
+
+    //Initiate the download process
+    var blob = new Blob([new Uint8Array(userDecryptedFile)], {
+      type: "application/octet-stream",
+    });
+    var url = URL.createObjectURL(blob);
+    var link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", userDecryptedFile.name); //Error here ?
+    link.click();
+  }
+}
 if (`${window.location}` == `${window.origin}/register`) register();
 else if (`${window.location}` == `${window.origin}/login`) login();
 else if (`${window.location}` == `${window.origin}/send_file`) encryptAndSend();
+else if (`${window.location}` == `${window.origin}/received_file`)
+  receiveAndDecrypt();
 else console.log("No Javacript for this route");
