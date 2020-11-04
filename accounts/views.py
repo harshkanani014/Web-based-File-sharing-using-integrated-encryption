@@ -86,7 +86,8 @@ def get_payload(request):
         body = json.loads(body_unicode)
         receiver = body.get('username')
         emitter = request.user
-        file_rec = body.get('payload')    
+        file_rec = body.get('payload')
+        payload_name = body.get('payloadName')   
         #print(type(file_rec))
         #print(file_rec)
         #print(file_rec)
@@ -94,6 +95,7 @@ def get_payload(request):
         new_message.emitter = emitter
         new_message.receiver = User.objects.get(username=receiver)
         new_message.file_upload = file_rec
+        new_message.file_name = payload_name
         new_message.save()
         return JsonResponse({"result": "ok"})
     
@@ -135,10 +137,11 @@ def send_encrypted_file(request):
     currentuser = request.user
     data = Message.objects.get(receiver=currentuser)
     file_is = data.file_upload
+    file_name = data.file_name
     #print(file_is)
     our_json = {"userFiles": file_is}
     #new_json = json.dump(our_json)
-    return JsonResponse({"userFiles": file_is})
+    return JsonResponse({"userFiles": file_is, "filename":file_name})
 
 def fetch_emmiter(request):
     currentuser = request.user

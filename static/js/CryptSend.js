@@ -579,9 +579,11 @@ function encryptAndSend() {
     payloadForm.append('file', payload);*/
     function sendFile(userEncryptedFile){
       console.log(userEncryptedFile);
+      console.log(userFile.files[0].name);
       let payload_json = {
         payload: userEncryptedFile,
-        username: `${recipientUserName.value}`,
+        payloadName: userFile.files[0].name,
+        username: `${recipientUserName.value}`
       };
       fetch(`${window.origin}/get_payload`, {
         method: "POST",
@@ -613,10 +615,10 @@ function receiveAndDecrypt() {
   //Fetch the files of the user from the database/server
   let userFiles = null;
   fetch(`${window.origin}/get_received_files`)
-  .then((res)=>{res.json().then((data)=>{console.log(data.userFiles); console.log(typeof data.userFiles);
+  .then((res)=>{res.json().then((data)=>{console.log(data.filename);
   downloadBtn.addEventListener("click", () => {
         console.log("Decryption process initiated.");
-        receive_key(data.userFiles);})})});
+        receive_key(data.userFiles, data.filename);})})});
   // .then((data) => {userFiles = data.userFiles; console.log(userFiles)});
   // .then(
   // .then(() => {
@@ -667,7 +669,7 @@ function receiveAndDecrypt() {
   //   receive_key();
   // });
   
-function receive_key(userFiles){
+function receive_key(userFiles, filename){
   let response = fetch(`${window.origin}/get_senderpublickey`);
     response.then(function (response) {
       response.json().then(function (data) {
@@ -675,12 +677,12 @@ function receive_key(userFiles){
         senderPublicKeyXHex = data.public_keyX;
         senderPublicKeyYHex = data.public_keyY;
         console.log(senderPublicKeyXHex);
-        decryption(senderPublicKeyXHex, senderPublicKeyYHex, userFiles);
+        decryption(senderPublicKeyXHex, senderPublicKeyYHex, userFiles, filename);
       });
     });
 
 }
-  async function decryption(senderPublicKeyXHex, senderPublicKeyYHex, userFiles) {
+  async function decryption(senderPublicKeyXHex, senderPublicKeyYHex, userFiles, filename) {
     /* Fetch the sender's public key from database/server
         senderPublicKeyXHex = 
         senderPublicKeyYHex = 
@@ -780,7 +782,7 @@ function receive_key(userFiles){
     var url = URL.createObjectURL(blob);
     var link = document.createElement("a");
     link.setAttribute("href", url);
-    link.setAttribute("download", userDecryptedFile.name); //Error here ?
+    link.setAttribute("download", filename); //Error here ?
     link.click();
   }
 }

@@ -7,6 +7,7 @@ class Message(models.Model):
     emitter = models.ForeignKey(User, related_name='+', on_delete=models.CASCADE, null=True)
     receiver = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     date_message = models.DateTimeField(default=timezone.now, null=True)
+    file_name = models.TextField(default="filename")
     file_upload = models.TextField(db_column='data', blank=True, null=True)
     """def set_data(self, data):
         self._data = base64.encodestring(data)
