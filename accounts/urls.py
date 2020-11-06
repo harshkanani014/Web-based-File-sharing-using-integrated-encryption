@@ -16,8 +16,8 @@ urlpatterns = [
      path("send_request", views.send_request, name="send_request"),
     path("get_payload", views.get_payload, name="get_payload"),
     path("get_received_files", views.send_encrypted_file, name="send_encrypted_file"),
-    path("get_senderpublickey", views.fetch_emmiter, name="fetch_emmiter")
-    
+    path("get_senderpublickey", views.fetch_emmiter, name="fetch_emmiter"),
+    path("index", views.index_page, name="index_page")
 ]
 
 

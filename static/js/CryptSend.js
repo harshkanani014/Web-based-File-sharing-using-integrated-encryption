@@ -388,7 +388,7 @@ function login() {
       }
       response.json().then(function (data) {
         console.log(data);
-        window.location.replace(`${window.origin}/send_file`);
+        window.location.replace(`${window.origin}/index`);
       });
     });
   }

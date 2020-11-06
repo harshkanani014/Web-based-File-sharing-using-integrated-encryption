@@ -1,37 +1,42 @@
 <!DOCTYPE html>
 <html>
-
-        <head>
-                <title>Sign Up</title>
-                <link rel="stylesheet" type="text/css" href="static/css/register.css">
-                <link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
-                <script src="https://kit.fontawesome.com/a81368914c.js"></script>
-                <meta name="viewport" content="width=device-width, initial-scale=1">
-        </head>
-
-        <body>
-                <div class="container">
-                        <div class="img">
-                                <img src="static/images/register.png">
-                        </div>
-                        <div class="reg-content">
-                                <form action="register" method="post">
-                                        {% csrf_token %}
-                                        <h2 class="title">CRYPTSEND</h2>
-                                        <label for="username">Username</label> <input id="Username"><br>
-                                        <label for="passphrase">Passphrase</label> <input id="Passphrase"><br>
-                                        <button type="button" id="secret">Create secret key file</button>
-                                </form>
-                                <div>
-                                        {% for message in messages %}
-                                        <h3> {{message}} </h3>
-                                        {% endfor %}
-                                </div>
-
-                        </div>
+<head>
+	<title>Sign Up</title>
+	<link rel="stylesheet" type="text/css" href="static/css/register.css">
+	<link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
+	<script src="https://kit.fontawesome.com/a81368914c.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+	<div class="container">
+		<div class="img">
+			<img src="static/images/register.png">
+		</div>
+		<div class="reg-content">
+			<form action="register" method="post">
+                        {% csrf_token %}
+                <h2 class="title">CRYPTSEND</h2>
+                   <div class="input-div one">
+                    <div class="i">
+                            <i class="fas fa-user"></i>
+                    </div>
+                    <div class="div">
+                            <input id="Username" placeholder="Username" type="text" class="input">
+                    </div>
+                 </div>
+           		<div class="input-div pass">
+           		   <div class="i"> 
+           		    	<i class="fas fa-lock"></i>
+           		   </div>
+           		   <div class="div">
+           		    	<input id="Passphrase" placeholder="Password" type="password" class="input">
+            	   </div>
                 </div>
-                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-                <script src="../static/js/CryptSend.js"></script>
-        </body>
-
+                <input type="button" id="secret" class="btn" value="Create A Secret File">
+            </form>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="../static/js/CryptSend.js"></script>
+</body>
 </html>

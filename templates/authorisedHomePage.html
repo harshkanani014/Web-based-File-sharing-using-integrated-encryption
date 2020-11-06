@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home Page</title>
+    <link rel="stylesheet" type="text/css" href="static/css/authorisedHomePage.css" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+      integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+      crossorigin="anonymous"
+    />
+    <link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
+	<script src="https://kit.fontawesome.com/a81368914c.js"></script>
+  </head>
+  <body style="background-color:#90CCF4;;">
+    <nav class="navbar-dark">
+      <div class="main">
+        <header>
+          <input type="checkbox" name="" id="" />
+          <a href="/logout">Logout</a>
+        </header>
+        <span class="username"> {{user.get_username}} </span>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="centreTag"> 
+		  CRYPTSEND
+      </div>
+    </div>
+    <div class="theme">
+      <div class="file-upload" style="margin-right: 10%;">
+		<a href="send_file" class="fa fa-arrow-up" style="background-color: transparent; border: none; "></a>
+    </div>
+     <div class="file-upload">
+      <a href="received_file" class="fa fa-arrow-down" style="background-color: transparent; border: none; "></a>
+      </div>
+  </div>
+  </body>
+</html>

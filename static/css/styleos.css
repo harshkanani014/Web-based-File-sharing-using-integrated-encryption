@@ -1,0 +1,83 @@
+body,html{
+  height: 100%;
+  margin: 0;
+  background-color: #F78888;
+}
+.bar{
+  background-color: #ECECEC;
+  width: 100%;
+  height: 30px;
+}
+.bar a{
+  float: right;
+  text-align: center;
+  padding: 5px 35px;
+  text-decoration: none;
+  color: black;
+  font-size: 15px;
+  background-color: #ECECEC;
+}
+.bar a:hover {
+  background-color: #F78888;
+  color: #ECECEC;
+}
+.send{
+  position: absolute;
+  top: 10%;
+  left: 15%;
+  color: #FFFFFF;
+}
+.send h1{
+  display: flex;
+  align-items: center;
+}
+.send h2{
+  display: flex;
+  align-items: center;
+}
+.send input{
+  display: flex;
+  align-items: center;
+  background-color: #F78888;
+  color: #FFFFFF;
+  padding: 5px;
+  border-style: dotted;
+  border-color: #FFFFFF;
+  font-size: 15px;
+}
+::placeholder{
+  color: #ECECEC;
+}
+button{
+  background-color: #FFFFFF;
+  color: #F78888;
+  width: 125px;
+  height: 45px;
+  border: none;
+  font-size: 18px;
+}
+#download{
+  background-color: #FFFFFF;
+  color: #F3D250;
+  width: 125px;
+  height: 45px;
+  border: none;
+  font-size: 18px;
+}
+.image-send{
+  position: absolute;
+  left: 30%;
+  bottom: 10%;
+}
+.image-recieve{
+  position: absolute;
+  left: 30%;
+  bottom: 3%;
+  
+}
+.bg-recieve{
+  background-color: #F3D250;
+  height: 100%;
+  top: 0;
+  left: 0;
+}

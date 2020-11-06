@@ -1,38 +1,32 @@
 <!DOCTYPE html>
-<html>
-
-	<head>
-		<title>Send File</title>
-	</head>
-
-	<body>
-		{% load crispy_forms_tags %}
-		{% block content %}
-		{%if user.is_authenticated %}
-		<h1>Hello {{user.get_username}}</h1>
-		<h2>Upload</h2>
-		<form method="post" enctype="multipart/form-data">
-			{% csrf_token %}
-			<input type="text" name="username" id="username" \>
-			<input type="file" name="document" id="userFile" \>
-			<button type="button" id="send">Send file</button>
-		</form>
-		{% if url %}
-		<p>Uploaded file: <a href="{{ url }}">{{ url }}</a></p>
-		{% endif %}
-		<div>
-			{% for message in messages %}
-			<h3> {{message}} </h3>
-			{% endfor %}
-		</div>
-
-		<a href="/logout">Logout</a>
-		{% else %}
-		<h1>PLEASE LOGIN</h1>
-		{% endif %}
-		{% endblock %}
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="static/css/styleos.css">
+  <title>Send</title>
+</head>
+<body>
+  <div class="bar">
+    <a href="/logout">Logout</a>
+    <a href="/recieved_file">Recieved</a>
+    <a href="/index">Home</a>
+  </div>
+  <div class="send">
+    <h1>Hello {{user.get_username}}</h1>
+    <h3>Ready to send encrypted file</h3>
+    <h2>Upload Here!!</h2><br>
+    <form method="post" enctype="multipart/form-data">
+      <input type="text" name="username" id="username" placeholder="username"><br>
+			<input type="file" name="document" id="userFile" ><br><br>
+			<button type="button" id="send">Send file</button><br>
+    </form>
+   <br> <p>Uploaded file:</p>
+  </div>
+  <div class="image-send">
+    <img src="static/images/upload-files.svg">
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<script src="../static/js/CryptSend.js"></script>
-	</body>
-
+</body>
 </html>

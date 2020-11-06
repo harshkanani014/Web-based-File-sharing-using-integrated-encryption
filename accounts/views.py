@@ -15,7 +15,10 @@ import base64
 # Create your views here.
 
 def home_page(request):
-    return render(request, "home_page.html")
+    return render(request, "unautherisedHomePage.html")
+
+def index_page(request):
+    return render(request, "authorisedHomePage.html")
 
 
 ###########################################################
@@ -25,7 +28,9 @@ def login(request):
     return render(request,'login.html')    
 
 def register(request):
-    return render(request, 'register.html')
+    if request.user.is_authenticated:
+        return render(request, 'register.html')
+    return redirect("/")
 
 
 

@@ -1,0 +1,160 @@
+*:focus {
+  outline: 0 !important;
+}
+
+html {
+    height: 100%;
+}
+  
+body {
+  background-color: #90ccf4;
+  height: 100%;
+  width: 100%;
+}
+
+nav {
+  background-color: #272727;
+  max-width: 100%;
+  border-radius: 0px;
+  height: 100%;
+}
+
+.navbar-dark {
+  margin: 0 !important;
+  height: 5vh;
+  background-color: #272727;
+  border-radius: 0px;
+  border-radius: 0%;
+}
+  
+.main {
+  display: flex;
+  align-items: center;
+  top:10%;
+  }
+  
+  header {
+    position: relative;
+    width: 70px;
+    height: 25px;
+  }
+  
+  header input {
+    position: absolute;
+    width: 100%;
+  height: 100%;
+  cursor: pointer;
+  z-index: 10;
+  -webkit-appearance: none;
+  outline: none;
+  }
+
+  header input::before {
+    content: "\002630";
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 2rem;
+  }
+
+  header input:checked::before {
+    content: url(cs.png);
+  }
+  
+  
+  
+  header a {
+    position: absolute;
+    opacity: 0;
+    transform: translate(0);
+    color: rgb(160, 160, 160);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 2rem;
+    transition: all 0.2s;
+  }
+  
+  header a:hover {
+    color: rgb(228, 228, 228);
+  }
+  
+  header input:checked ~ a {
+  display: block;
+  opacity: 1;
+}
+  
+  header input:checked ~ a:nth-child(2) {
+    transform: translate(100px);
+  }
+  
+  .username{
+    margin-left: 85%;
+    color: rgb(160, 160, 160);
+    margin-top: 1.25vh;
+    font-weight: 100;
+    letter-spacing: 1mm;
+    font-size: 2rem;
+    font-family: 'Staatliches', cursive;
+  }
+  
+  .centreTag{
+    position: absolute;
+    width: 957px;
+    height: 166px;
+  top: 110px;
+  font-family: Unna;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 144px;
+  line-height: 166px;
+  letter-spacing: 0.2em;
+  text-align: center;
+  color: #000000;
+  }
+  
+  .theme {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  }
+  
+  .file-upload {
+    height: 200px;
+    width: 200px;
+    border-radius: 100px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 4px solid #ffffff;
+    overflow: hidden;
+    background-image: linear-gradient(to bottom, #90ccf4 50%, #ffffff 50%);
+    background-size: 100% 200%;
+    transition: all 1s;
+    color: #ffffff;
+    font-size: 100px;
+  }
+  
+  
+  
+  input[type="file"] {
+    height: 200px;
+    width: 200px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  
+  .theme .file-upload:hover {
+    background-position: 0 -100%;
+    color: #2590EB;
+  }
+  

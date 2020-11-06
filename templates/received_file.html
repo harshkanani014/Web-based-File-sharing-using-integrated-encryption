@@ -1,30 +1,43 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Received File</title>
-</head>
-
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="static/css/styleos.css">
+    <title>Recieved-file</title>
+  </head>
 <body>
-	{% block content %}
+  <div class="bg-recieve">
+  <div class="bar">
+    <a href="/logout">Logout</a>
+    <a href="/send_file">Send</a>
+    <a href="/index">Home</a>
+  </div>
+  {% block content %}
 	{%if user.is_authenticated %}
-		<h1>Hello {{user.get_username}}</h1>
-		<a href="/logout">Logout</a>
-		{% for message in Messages %}
+  <div class="send">
+    <h1>Hello {{user.get_username}}</h1>
+    {% for message in Messages %}
 			
 			{% if message.file_upload %}
 				{% if message.receiver == user %}
-				<h1>From : {{ message.emitter }}</h1>
-				<h1>Date : {{ message.date_message }}</h1>
-				<button type="button" id="download">Download</a>
-				{% endif %}
+    <h3>See Recieved Messages here</h3><br>
+    <h1>From : {{ message.emitter }} </h1>
+    <h1>Date : {{ message.date_message }} </h1><br>
+    <button type="button" id="download">Download</button><br>
+    {% endif %}
 			{% endif %}
 		{% endfor %}
 	{% else %}
-        <h1>PLEASE LOGIN</h1>
-	{% endif %}
+    <h1>PLEASE LOGIN</h1><br>
+    {% endif %}
 	{% endblock %}
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  </div>
+  <div class="image-recieve">
+    <img src="static/images/envelope.svg">
+  </div>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="../static/js/CryptSend.js"></script>
-	
 </body>
 </html>
